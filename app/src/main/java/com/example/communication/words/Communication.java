@@ -16,16 +16,13 @@ import android.widget.ListView;
 
 import com.example.communication.R;
 import com.example.communication.adapter.WordsListAdapter;
-import com.example.communication.database_client.DatabaseOpenHelper;
+import com.example.communication.database_client.DatabaseAccess;
 import com.example.communication.model.Words;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Communication extends Fragment implements View.OnClickListener {
 
-    private SQLiteDatabase database;
-    private SQLiteOpenHelper DBHelper;
 
     private SearchView searchView;
     private Button simple,food;
@@ -82,24 +79,7 @@ public class Communication extends Fragment implements View.OnClickListener {
     get Each Word List in database_client
      */
     public List<Words> getAllWord(String string){
-
-        Words words;
-        List<Words> wordsList=new ArrayList<>();
-
-        DBHelper=new DatabaseOpenHelper(getContext());
-        database=DBHelper.getWritableDatabase();
-
-        Cursor cursor=database.rawQuery("select * from EngMyn where category like "+"'%"+string+"%'",null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()){
-            words=new Words(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
-            wordsList.add(words);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        database.close();
-
-        return wordsList;
+        return DatabaseAccess.getInstance(getContext()).getAllWord(string);
     }
 
     @Override

@@ -21,6 +21,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/speed"/>
+    <SeekBar
+        android:id="@+id/seekbar_controlspeech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:max="200"
+        android:progress="100"
+        />
+    <TextView
+        android:id="@+id/tv_pitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/speed"/>
+    <SeekBar
+        android:id="@+id/seekbar_controlpitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:max="200"
+        android:progress="100"
+        />
     <Button
         android:id="@+id/btn_speak"
         android:layout_width="wrap_content"

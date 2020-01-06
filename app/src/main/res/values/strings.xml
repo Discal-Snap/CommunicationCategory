@@ -10,5 +10,6 @@
 
     <string name="speed">speed</string>
     <string name="speak">speak</string>
+    <string name="pitch">pitch</string>
 
 </resources>

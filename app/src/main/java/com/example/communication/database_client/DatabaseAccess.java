@@ -1,5 +1,6 @@
 package com.example.communication.database_client;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,14 +37,15 @@ public class DatabaseAccess {
         }
     }
 
-    public List<Words> getAllWord(){
-        Words words;
+    public List<Words> getAllWord(String string){
+
+        Words words=null;
         List<Words> wordsList=new ArrayList<>();
         open();
-        Cursor cursor=database.rawQuery("select * from EngMyn",null);
+        Cursor cursor=database.rawQuery("select * from EngMyn where category like "+"'%"+string+"%'",null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
-            words=new Words(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+            words=new Words(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
             wordsList.add(words);
             cursor.moveToNext();
         }
@@ -51,5 +53,30 @@ public class DatabaseAccess {
         close();
         return wordsList;
     }
-    
+
+    public int update(int id,String file_location){
+        open();
+        database.beginTransaction();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("file_location",file_location);
+        int result=database.update("EngMyn",contentValues,"id="+id,null);
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        close();
+        return result;
+    }
+
+    public String getFileLocation(String text){
+        String result="not found";
+        open();
+        Cursor cursor = database.rawQuery("select * from EngMyn where Eng = "+"'"+text.trim()+"'",null);
+        if (cursor.moveToFirst()){
+            result=cursor.getString(5);
+        }
+        cursor.close();
+        close();
+
+        return result;
+    }
+
 }

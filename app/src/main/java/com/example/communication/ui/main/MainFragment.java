@@ -1,34 +1,33 @@
 package com.example.communication.ui.main;
 
-import androidx.lifecycle.ViewModelProviders;
-
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.communication.PlayMp3File;
 import com.example.communication.R;
+import com.example.communication.database_client.DatabaseAccess;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.io.IOException;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements View.OnClickListener {
 
     private TextView textToSpeak;
     private TextView speed;
     private Button speak;
+    private SeekBar controlspeech,controlpitch;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -42,9 +41,13 @@ public class MainFragment extends Fragment {
 
         View view=inflater.inflate(R.layout.main_fragment, container, false);
 
+        controlspeech=view.findViewById(R.id.seekbar_controlspeech);
+        controlpitch=view.findViewById(R.id.seekbar_controlpitch);
         textToSpeak=view.findViewById(R.id.tv_textToSpeak);
         speed=view.findViewById(R.id.tv_speed);
         speak=view.findViewById(R.id.btn_speak);
+
+        speak.setOnClickListener(this);
 
         return view;
     }
@@ -62,4 +65,25 @@ public class MainFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onClick(View v) {
+        Log.d(TAG, "onClick: Text For Speaking :::::::"+textToSpeak.getText());
+     switch (v.getId()){
+         case R.id.btn_speak:
+             String file= DatabaseAccess.getInstance(getContext()).getFileLocation(textToSpeak.getText().toString());
+             Log.d(TAG, "onClick: FileLocation;::::::::::::::"+file);
+             if (file != null){
+                 try {
+                     float speed= (float) (controlspeech.getProgress()*0.01);
+                     float pitch= (float) (controlpitch.getProgress()*0.01);
+                     Log.d(TAG, "onClick: Speed:::::::::"+speed+"  pitch::::::::"+pitch);
+                     PlayMp3File.newInstance().playMp3(file,speed,pitch);
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+             }
+             break;
+     }
+    }
 }
