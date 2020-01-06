@@ -1,4 +1,4 @@
-package com.example.communication.database;
+package com.example.communication.database_client;
 
 import android.content.Context;
 
