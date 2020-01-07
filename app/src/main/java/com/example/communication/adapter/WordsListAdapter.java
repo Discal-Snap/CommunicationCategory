@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -22,6 +24,7 @@ import com.example.communication.database_client.DatabaseAccess;
 import com.example.communication.database_client.FileDownloadClient;
 import com.example.communication.model.Words;
 import com.example.communication.ui.main.MainFragment;
+import com.example.communication.words.Communication;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class WordsListAdapter extends BaseAdapter {
+public class WordsListAdapter extends BaseAdapter{
     private static final String TAG = "WordsListAdapter";
 
     public List<Words> wordsList;
@@ -58,7 +61,7 @@ public class WordsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Words getItem(int position) {
         return wordsList.get(position);
     }
 
@@ -75,26 +78,8 @@ public class WordsListAdapter extends BaseAdapter {
 
         tv_word=convertView.findViewById(R.id.tv_words);
         btn_speak=convertView.findViewById(R.id.imgbtn_speak);
+        btn_speak.setFocusable(false);
         tv_word.setText(words.getEng());
-
-        /*
-        On Click to intent
-         */
-        tv_word.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle=new Bundle();
-                bundle.putString("words",wordsList.get(position).getEng());
-
-                Fragment fragment=MainFragment.newInstance();
-                fragment.setArguments(bundle);
-
-                FragmentTransaction fragmentTransaction=((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container,fragment);
-                fragmentTransaction.addToBackStack(WordsListAdapter.class.toString());
-                fragmentTransaction.commit();
-            }
-        });
 
         /*
            On Click to speaking transition
@@ -104,8 +89,9 @@ public class WordsListAdapter extends BaseAdapter {
            public void onClick(View v) {
                if (wordsList.get(position).getFile_location() == null){
                    Log.d("DownLoad File", "onClick: :::::::::::::"+wordsList.get(position).getFile_location());
-                   String Murl=url+wordsList.get(position).getFile_name();
+                   final String  Murl=url+wordsList.get(position).getFile_name();
                    Log.w(TAG, "onClick: URL location:::::::::::::::::"+Murl);
+
                    downloadFile(Murl,position);
 
                }else {
@@ -168,6 +154,17 @@ public class WordsListAdapter extends BaseAdapter {
                             int result= DatabaseAccess.getInstance(context).update(wordsList.get(position).getwID(),aVoid);
 
                             Log.d(TAG, "onPostExecute: UPDATE Database:::::::::::"+wordsList.get(position).getFile_location());
+
+                            //Communication.newInstance().wordsListAdapter.notifyDataSetChanged();
+                            //Play Mp3 file
+                            String file=wordsList.get(position).getFile_location();
+                            Log.d("DownLoad File", "onClick: ::::::::::::;;;;;;;;;;;;;;:"+file);
+                            try {
+                                PlayMp3File.newInstance().playMp3(file);
+                            }catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
 
                         }
                     }.execute();

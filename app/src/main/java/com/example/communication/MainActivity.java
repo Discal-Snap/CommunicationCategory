@@ -17,17 +17,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
-            openFragment(Communication.newInstance());
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.container, Communication.newInstance())
-//                    .commitNow();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, Communication.newInstance())
+                    .commitNow();
         }
     }
 
-    public final void openFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container,fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+//    public final void openFragment(Fragment fragment){
+//        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.replace(R.id.container,fragment);
+//        fragmentTransaction.addToBackStack(null);
+//        fragmentTransaction.commit();
+//    }
 }

@@ -34,7 +34,7 @@
         android:id="@+id/tv_pitch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/speed"/>
+        android:text="@string/pitch"/>
     <SeekBar
         android:id="@+id/seekbar_controlpitch"
         android:layout_width="match_parent"

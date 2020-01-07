@@ -7,17 +7,22 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.communication.R;
 import com.example.communication.adapter.WordsListAdapter;
 import com.example.communication.database_client.DatabaseAccess;
 import com.example.communication.model.Words;
+import com.example.communication.ui.main.MainFragment;
 
 import java.util.List;
 
@@ -28,7 +33,7 @@ public class Communication extends Fragment implements View.OnClickListener {
     private Button simple,food;
     private ListView lvshowWrod;
     public List<Words> wordsList;
-    private WordsListAdapter wordsListAdapter;
+    public WordsListAdapter wordsListAdapter;
 
     public static Communication newInstance() {
         return new Communication();
@@ -47,6 +52,24 @@ public class Communication extends Fragment implements View.OnClickListener {
 
         simple.setOnClickListener(this);
         food.setOnClickListener(this);
+
+        lvshowWrod.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getContext(),"Hello",Toast.LENGTH_SHORT).show();
+                Bundle bundle=new Bundle();
+                bundle.putString("Engwords",wordsList.get(position).getEng());
+                bundle.putString("Mnywords",wordsList.get(position).getMyn());
+
+                Fragment fragment= MainFragment.newInstance();
+                fragment.setArguments(bundle);
+
+                FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container,fragment);
+                fragmentTransaction.addToBackStack(WordsListAdapter.class.toString());
+                fragmentTransaction.commit();
+            }
+        });
 
         searchFun();
 

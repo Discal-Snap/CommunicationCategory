@@ -1,6 +1,5 @@
 package com.example.communication;
 
-import android.app.Activity;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -142,10 +141,8 @@ public class PlayMp3File{
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void playMp3(String location, float speed, float pitch) throws IOException {
-
         if (location != null) {
             Log.d(TAG, "playMp3: ::::::::::::::::::::::::" + location);
-
 
             MediaPlayer mPlayer = new MediaPlayer();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

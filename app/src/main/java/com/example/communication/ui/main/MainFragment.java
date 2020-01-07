@@ -60,7 +60,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         Log.d(TAG, "onActivityCreated: :::::::::"+bundle);
 
         if (bundle != null){
-            textToSpeak.setText(bundle.getString("words"));
+            textToSpeak.setText(bundle.getString("Engwords"));
         }
 
     }
@@ -86,4 +86,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
              break;
      }
     }
+
+
+
 }

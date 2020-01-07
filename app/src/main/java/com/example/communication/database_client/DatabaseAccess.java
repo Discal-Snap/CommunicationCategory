@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.communication.model.Words;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAccess {
+    private static final String TAG = "DatabaseAccess";
     public SQLiteOpenHelper openHelper;
     public SQLiteDatabase database;
     public static DatabaseAccess instance;
@@ -62,6 +64,7 @@ public class DatabaseAccess {
         int result=database.update("EngMyn",contentValues,"id="+id,null);
         database.setTransactionSuccessful();
         database.endTransaction();
+        Log.d(TAG, "update: UPDATE Database Successfully;;;;;;;;;;;;;;;");
         close();
         return result;
     }
